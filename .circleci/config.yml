@@ -236,17 +236,17 @@ jobs:
             npm install
             npm run migrations > migrations_log.txt
             cat ./migrations_log.txt
-      - run:
-          name: Store migration results to KVdb
-          command: |
-            if grep "migration has failed" ./backend/migrations_log.txt;
-            then
-              echo "Database migration has failed, verify DB setup!"
-              curl https://kvdb.io/VazN2jHQzjkcnj1zyZXt5K/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d 'failure'
-            else
-              echo "Database migration has been executed succcessfully"
-              curl https://kvdb.io/VazN2jHQzjkcnj1zyZXt5K/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d 'success'
-            fi
+      # - run:
+      #     name: Store migration results to KVdb
+      #     command: |
+      #       if grep "migration has failed" ./backend/migrations_log.txt;
+      #       then
+      #         echo "Database migration has failed, verify DB setup!"
+      #         curl https://kvdb.io/VazN2jHQzjkcnj1zyZXt5K/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d 'failure'
+      #       else
+      #         echo "Database migration has been executed succcessfully"
+      #         curl https://kvdb.io/VazN2jHQzjkcnj1zyZXt5K/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d 'success'
+      #       fi
       # - destroy-environment:
       #     workflowID: ${CIRCLE_WORKFLOW_ID:0:7}
 
