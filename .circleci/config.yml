@@ -56,9 +56,10 @@ commands:
             # echo $SUCCESS
             # if(( "$SUCCESS"=="success" ));
             # then
-              cd ./backend
-              npm install -f
-              npm run migrations:revert
+              # cd ./backend
+              # npm install -f
+              # npm run migrations:revert
+              echo "success"
             # fi
 
 jobs:
