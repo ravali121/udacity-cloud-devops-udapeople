@@ -215,9 +215,9 @@ jobs:
             pwd
             cat ./.circleci/ansible/inventory.txt
             cd ./.circleci/ansible
-          # ansible-playbook -i inventory.txt configure-server.yml
-      # - destroy-environment:
-      #     workflowID: ${CIRCLE_WORKFLOW_ID:0:7}
+            ansible-playbook -i inventory.txt configure-server.yml
+      - destroy-environment:
+          workflowID: ${CIRCLE_WORKFLOW_ID:0:7}
 
   run-migrations:
     docker:
@@ -239,19 +239,19 @@ jobs:
             npm install
             npm run migrations > migrations_log.txt
             cat ./migrations_log.txt
-      # - run:
-      #     name: Store migration results to KVdb
-      #     command: |
-      #       if grep "migration has failed" ./backend/migrations_log.txt;
-      #       then
-      #         echo "Database migration has failed, verify DB setup!"
-      #         curl https://kvdb.io/VazN2jHQzjkcnj1zyZXt5K/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d 'failure'
-      #       else
-      #         echo "Database migration has been executed succcessfully"
-      #         curl https://kvdb.io/VazN2jHQzjkcnj1zyZXt5K/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d 'success'
-      #       fi
-      # - destroy-environment:
-      #     workflowID: ${CIRCLE_WORKFLOW_ID:0:7}
+      - run:
+          name: Store migration results to KVdb
+          command: |
+            if grep "migration has failed" ./backend/migrations_log.txt;
+            then
+              echo "Database migration has failed, verify DB setup!"
+              curl https://kvdb.io/VazN2jHQzjkcnj1zyZXt5K/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d 'failure'
+            else
+              echo "Database migration has been executed succcessfully"
+              curl https://kvdb.io/VazN2jHQzjkcnj1zyZXt5K/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d 'success'
+            fi
+      - destroy-environment:
+          workflowID: ${CIRCLE_WORKFLOW_ID:0:7}
 
   deploy-frontend:
     docker:
@@ -294,7 +294,6 @@ jobs:
           root: .
           paths:
             - ./frontend/dist
-      # Here's where you will add some code to rollback on failure
 
   deploy-backend:
     docker:
@@ -382,14 +381,6 @@ jobs:
             yum install -y tar gzip curl
             curl -sL https://rpm.nodesource.com/setup_10.x | bash -
             yum install -y nodejs
-      # - run:
-      #     name: Send old workflow ID to KVdb
-      #     working_directory: ./.circleci/files
-      #     command: |
-      #       OLD_WORKFLOW_ID=$(aws cloudformation list-exports \
-      #         --query "Exports[?Name==\`WorkflowID\`].Value" \
-      #         --no-paginate --output text)
-      #       echo "OLD_WORKFLOW_ID=$OLD_WORKFLOW_ID"
       - run:
           name: Update cloudfront distribution
           command: |
@@ -398,10 +389,10 @@ jobs:
               --tags project=udapeople \
               --stack-name "udapeople-cloudfront-production" \
               --parameter-overrides WorkflowID="udapeople-${CIRCLE_WORKFLOW_ID:0:7}"
-      # - destroy-environment:
-      #     workflowID: ${CIRCLE_WORKFLOW_ID:0:7}
-      # - revert-migrations:
-      #     workflowID: ${CIRCLE_WORKFLOW_ID:0:7}
+      - destroy-environment:
+          workflowID: ${CIRCLE_WORKFLOW_ID:0:7}
+      - revert-migrations:
+          workflowID: ${CIRCLE_WORKFLOW_ID:0:7}
 
   cleanup:
     docker:
@@ -441,26 +432,26 @@ workflows:
           requires: [build-frontend]
       - test-backend:
           requires: [build-backend]
-      # - scan-backend:
-      #     requires: [build-backend]
-      # - scan-frontend:
-      #     requires: [build-frontend]
-      # - deploy-infrastructure:
-      #     requires: [test-frontend, test-backend]
-      #     filters:
-      #       branches:
-      #         only: [main]
-      # - configure-infrastructure:
-      #     requires: [deploy-infrastructure]
-      # - run-migrations:
-      #     requires: [configure-infrastructure]
-      # - deploy-frontend:
-      #     requires: [run-migrations]
-      # - deploy-backend:
-      #     requires: [run-migrations]
-      # - smoke-test:
-      #     requires: [deploy-backend, deploy-frontend]
-      # - cloudfront-update:
-      #     requires: [smoke-test]
+      - scan-backend:
+          requires: [build-backend]
+      - scan-frontend:
+          requires: [build-frontend]
+      - deploy-infrastructure:
+          requires: [scan-frontend, scan-backend]
+          filters:
+            branches:
+              only: [main]
+      - configure-infrastructure:
+          requires: [deploy-infrastructure]
+      - run-migrations:
+          requires: [configure-infrastructure]
+      - deploy-frontend:
+          requires: [run-migrations]
+      - deploy-backend:
+          requires: [run-migrations]
+      - smoke-test:
+          requires: [deploy-backend, deploy-frontend]
+      - cloudfront-update:
+          requires: [smoke-test]
       - cleanup:
-          requires: [test-frontend, test-backend]
+          requires: [cloudfront-update]
