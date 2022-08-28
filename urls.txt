@@ -16,4 +16,6 @@
   http://ec2-35-92-44-13.us-west-2.compute.amazonaws.com:9090/graph
 
 
-Note: For remarks about presentation - I highlighted the points in my presentation, that already has the pointers related to the feedback provided. 
+Notes: 
+ 1. For remarks about presentation - I highlighted the points in my presentation, that already has the pointers related to the feedback provided. 
+ 2. I am using my personal AWS account. So I stopped the instances previously
