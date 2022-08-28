@@ -70,6 +70,9 @@ jobs:
       - restore_cache:
           keys: [frontend-build]
       - run:
+          name: Echo workflow ID at the start
+          command: echo "WorkflowID=${CIRCLE_WORKFLOW_ID:0:7}"
+      - run:
           name: Build front-end
           command: |
             cd frontend
@@ -324,10 +327,10 @@ jobs:
             cat inventory.txt
             export ANSIBLE_HOST_KEY_CHECKING=false
             ansible-playbook -i inventory.txt deploy-backend.yml -vvv
-      # - destroy-environment:
-      #     workflowID: ${CIRCLE_WORKFLOW_ID:0:7}
-      # - revert-migrations:
-      #     workflowID: ${CIRCLE_WORKFLOW_ID:0:7}
+      - destroy-environment:
+          workflowID: ${CIRCLE_WORKFLOW_ID:0:7}
+      - revert-migrations:
+          workflowID: ${CIRCLE_WORKFLOW_ID:0:7}
       # Here's where you will add some code to rollback on failure
 
 smoke-test:
@@ -428,8 +431,8 @@ workflows:
           requires: [run-migrations]
       - deploy-backend:
           requires: [run-migrations]
-      # - smoke-test:
-      #     requires: [deploy-backend, deploy-frontend]
+      - smoke-test:
+          requires: [deploy-backend, deploy-frontend]
       # - cloudfront-update:
       #     requires: [smoke-test]
       # - cleanup:
