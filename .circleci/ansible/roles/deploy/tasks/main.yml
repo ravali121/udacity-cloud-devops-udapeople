@@ -1,8 +1,8 @@
 ---
-- name: Upgrade npm
-  become: true
-  shell: |
-    npm install -g npm@latest
+# - name: Upgrade npm
+#   become: true
+#   shell: |
+#     npm install -g npm@latest
 - name: Copy compiled files
   unarchive:
     src: /Users/ravalipeddi/Documents/personal_dev/udacity-cloud-devops-udapeople/backend.tar.gz
