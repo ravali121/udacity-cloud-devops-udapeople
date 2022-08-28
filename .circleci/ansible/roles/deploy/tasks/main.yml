@@ -5,7 +5,7 @@
 #     npm install -g npm@latest
 - name: Copy compiled files
   unarchive:
-    src: /Users/ravalipeddi/Documents/personal_dev/udacity-cloud-devops-udapeople/backend.tar.gz
+    src: /root/project/backend.tar.gz
     dest: /home/ubuntu/
 
 - name: Build backend
