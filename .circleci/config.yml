@@ -57,7 +57,7 @@ commands:
             # if(( "$SUCCESS"=="success" ));
             # then
               cd ./backend
-              npm install
+              # npm install
               npm run migrations:revert
             # fi
 
