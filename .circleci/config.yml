@@ -365,8 +365,8 @@ jobs:
           command: |
             URL="http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-website-us-west-2.amazonaws.com"
             curl -s ${URL} | grep "welcome"
-      - destroy-environment:
-          workflowID: ${CIRCLE_WORKFLOW_ID:0:7}
+      # - destroy-environment:
+      #     workflowID: ${CIRCLE_WORKFLOW_ID:0:7}
       - revert-migrations:
           workflowID: ${CIRCLE_WORKFLOW_ID:0:7}
 
@@ -427,32 +427,32 @@ jobs:
 workflows:
   default:
     jobs:
-      - build-frontend
-      - build-backend
-      - test-frontend:
-          requires: [build-frontend]
-      - test-backend:
-          requires: [build-backend]
-      # - scan-backend:
-      #     requires: [build-backend]
-      # - scan-frontend:
+      # - build-frontend
+      # - build-backend
+      # - test-frontend:
       #     requires: [build-frontend]
-      - deploy-infrastructure:
-          requires: [build-frontend, build-backend]
-          filters:
-            branches:
-              only: [main]
-      - configure-infrastructure:
-          requires: [deploy-infrastructure]
-      - run-migrations:
-          requires: [configure-infrastructure]
-      - deploy-frontend:
-          requires: [run-migrations]
-      - deploy-backend:
-          requires: [run-migrations]
-      - smoke-test:
-          requires: [deploy-backend, deploy-frontend]
-      - cloudfront-update:
-          requires: [smoke-test]
-      - cleanup:
-          requires: [cloudfront-update]
+      # - test-backend:
+      #     requires: [build-backend]
+      # # - scan-backend:
+      # #     requires: [build-backend]
+      # # - scan-frontend:
+      # #     requires: [build-frontend]
+      # - deploy-infrastructure:
+      #     requires: [build-frontend, build-backend]
+      #     filters:
+      #       branches:
+      #         only: [main]
+      # - configure-infrastructure:
+      #     requires: [deploy-infrastructure]
+      # - run-migrations:
+      #     requires: [configure-infrastructure]
+      # - deploy-frontend:
+      #     requires: [run-migrations]
+      # - deploy-backend:
+      #     requires: [run-migrations]
+      - smoke-test
+      #     requires: [deploy-backend, deploy-frontend]
+      # - cloudfront-update:
+      #     requires: [smoke-test]
+      # - cleanup:
+      #     requires: [cloudfront-update]
