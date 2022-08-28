@@ -239,7 +239,11 @@ jobs:
       - run:
           name: Store migration results to KVdb
           command: |
-            if [ grep "has been executed successfully" ./backend/migrations_log.txt; ] | [ grep "no migrations are pending" ./backend/migrations_log.txt; ]
+            if grep "has been executed successfully" ./backend/migrations_log.txt;
+            then
+              echo "Database migration has been executed succcessfully"
+              curl https://kvdb.io/DzbCCMCrDZEebUJKQhLZ47/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d 'success'
+            elif grep "no migrations are pending" ./backend/migrations_log.txt;
             then
               echo "Database migration has been executed succcessfully"
               curl https://kvdb.io/DzbCCMCrDZEebUJKQhLZ47/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d 'success'
