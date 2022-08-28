@@ -1,0 +1,16 @@
+[URL01] - Project github repository public url
+  https://github.com/ravali121/udacity-cloud-devops-udapeople
+
+
+[URL02] - S3 bucket(green candidate front-end)
+  https://udapeople-f9176ab.s3.us-west-2.amazonaws.com/index.html
+
+
+[URL03] - CloudFront distribution url (blue production front-end)
+  d2w8y8jebpq2xm.cloudfront.net
+
+[URL04] - Public URL to deployed application back-end in EC2
+  https://52.35.14.196:3030/api/status
+
+[URL05] - Public URL to your Prometheus Server
+  http://ec2-35-92-44-13.us-west-2.compute.amazonaws.com:9090/graph
