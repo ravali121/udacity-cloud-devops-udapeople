@@ -239,17 +239,13 @@ jobs:
       - run:
           name: Store migration results to KVdb
           command: |
-            if grep "has been executed successfully" ./backend/migrations_log.txt;
+            if grep "migration has failed" ./backend/migrations_log.txt;
             then
-              echo "Database migration has been executed succcessfully"
-              curl https://kvdb.io/DzbCCMCrDZEebUJKQhLZ47/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d 'success'
-            elif grep "no migrations are pending" ./backend/migrations_log.txt;
-            then
-              echo "Database migration has been executed succcessfully"
-              curl https://kvdb.io/DzbCCMCrDZEebUJKQhLZ47/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d 'success'
-            else
               echo "Database migration has failed, verify DB setup!"
-              curl https://kvdb.io/DzbCCMCrDZEebUJKQhLZ47/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d 'failure'
+              curl https://kvdb.io/VazN2jHQzjkcnj1zyZXt5K/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d 'failure'
+            else
+              echo "Database migration has been executed succcessfully"
+              curl https://kvdb.io/VazN2jHQzjkcnj1zyZXt5K/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d 'success'
             fi
       # - destroy-environment:
       #     workflowID: ${CIRCLE_WORKFLOW_ID:0:7}
@@ -328,8 +324,8 @@ jobs:
             cat inventory.txt
             export ANSIBLE_HOST_KEY_CHECKING=false
             ansible-playbook -i inventory.txt deploy-backend.yml -vvv
-      - destroy-environment:
-          workflowID: ${CIRCLE_WORKFLOW_ID:0:7}
+      # - destroy-environment:
+      #     workflowID: ${CIRCLE_WORKFLOW_ID:0:7}
       # - revert-migrations:
       #     workflowID: ${CIRCLE_WORKFLOW_ID:0:7}
       # Here's where you will add some code to rollback on failure
