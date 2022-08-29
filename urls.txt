@@ -17,5 +17,7 @@
 
 
 Notes: 
- 1. For remarks about presentation - I highlighted the points in my presentation, that already has the pointers related to the feedback provided. 
- 2. I am using my personal AWS account. So I stopped the instances previously
+
+ 1. I am using my personal AWS account. So I stopped the instances previously
+ 2. Earlier, prometheus gave me "No Data Points" for disk and memory usage metrics. That's why I did not include them. Added them both now.
+3. The backend has some issues with moment-timezone(including the screenshot) which is causing the migration to fail. I fixed it and now the application is functioning
